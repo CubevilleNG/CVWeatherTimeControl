@@ -1,7 +1,5 @@
 package org.cubeville.cvweathertimecontrol;
 
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -100,8 +98,8 @@ public final class CVWeatherTimeControl extends JavaPlugin implements Listener {
                 player.getLocation().getWorld().setThundering(true);
                 this.weatherChangeTimer = 48;
             }
-            /*if (type != null)
-                this.cvipc.sendMessage("cmd|console|tr §d" + player.getDisplayName() + " paid " + cost + " cubes for " + type + ".");*/
+            if (type != null)
+                this.cvipc.sendMessage("cmd|console|tr §d" + player.getDisplayName() + " paid " + cost + " cubes for " + type + " at " + player.getWorld().getName() +".");
         } else {
             player.sendMessage("§cTransaction failed.");
         }
