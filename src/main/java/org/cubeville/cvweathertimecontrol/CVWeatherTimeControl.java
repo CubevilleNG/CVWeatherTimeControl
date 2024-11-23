@@ -28,7 +28,9 @@ public final class CVWeatherTimeControl extends JavaPlugin implements Listener {
     int timeChangeTimer = 0;
 
     boolean paidNight = false;
+    boolean paidStorm = false;
     World paidNightWorld;
+    World paidStormWorld;
 
     public void onEnable() {
         RegisteredServiceProvider<Economy> serviceProvider = getServer().getServicesManager().getRegistration(Economy.class);
@@ -44,6 +46,9 @@ public final class CVWeatherTimeControl extends JavaPlugin implements Listener {
                 CVWeatherTimeControl.this.timeChangeTimer--;
             if(paidNight && paidNightWorld != null && (paidNightWorld.getTime() > 0L && paidNightWorld.getTime() < 13000L)) {
                 paidNight = false;
+            }
+            if(paidStorm && paidStormWorld != null && !paidStormWorld.hasStorm()) {
+                paidStorm = false;
             }
         },  1000L, 1000L);
         Bukkit.getPluginManager().registerEvents(this, this);
@@ -97,6 +102,8 @@ public final class CVWeatherTimeControl extends JavaPlugin implements Listener {
                 player.getLocation().getWorld().setStorm(true);
                 player.getLocation().getWorld().setThundering(true);
                 this.weatherChangeTimer = 48;
+                this.paidStorm = true;
+                this.paidStormWorld = player.getLocation().getWorld();
             }
             if (type != null)
                 this.cvipc.sendMessage("cmd|console|tr §d" + player.getDisplayName() + " paid " + cost + " cubes for " + type + " at " + player.getWorld().getName() +".");
@@ -112,6 +119,9 @@ public final class CVWeatherTimeControl extends JavaPlugin implements Listener {
         if(paidNight) {
             e.setCancelled(true);
             e.getPlayer().sendMessage(ChatColor.RED + "You cannot sleep through nights that someone paid for!");
+        } else if(paidStorm) {
+            e.setCancelled(true);
+            e.getPlayer().sendMessage(ChatColor.RED + "You cannot sleep through a storm that someone paid for!");
         }
     }
 }
